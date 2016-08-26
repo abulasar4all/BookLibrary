@@ -2,7 +2,7 @@ from django.db.models import Count
 from django.shortcuts import get_object_or_404, render
 from django.views.generic import DetailView,View
 from .models import Author,Book
-
+from .forms import FormReview
 # Create your views here.
 def list_books(request):
 	"""
@@ -54,9 +54,12 @@ def review_book(request, pk):
 	Review an individual book
 	"""
 	book = get_object_or_404(Book, pk=pk)
+
+	form = FormReview
 	
 	context = {
 		'book': book,
+		'form': form
 	}
 	
 	return render(request, "review-book.html", context)
