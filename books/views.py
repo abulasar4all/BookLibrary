@@ -1,6 +1,8 @@
+from django.core.urlresolvers import reverse
 from django.db.models import Count
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import DetailView,View
+from django.views.generic.edit import CreateView
 from .models import Author,Book
 from .forms import BookForm, ReviewForm
 # Create your views here.
@@ -14,7 +16,7 @@ def list_books(request):
 	}
 	return render(request, "list.html", context)
 
-class AuthorList(View):
+class AuthorList(View):                   #This is class-based view
 	def get(self, request):
 
 		authors = Author.objects.annotate(
@@ -92,4 +94,10 @@ def review_book(request, pk):
 	
 	return render(request, "review-book.html", context)
 
-
+class CreateAuthor(CreateView):
+	model = Author
+	fields = ['name']
+	template_name = "create-author.html"
+	
+	def get_success_url(self):
+		return reverse('review-books')
